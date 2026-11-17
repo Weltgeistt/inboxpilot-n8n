@@ -1,0 +1,16 @@
+{
+  "name": "inboxpilot-n8n",
+  "version": "1.0.0",
+  "private": true,
+  "description": "InboxPilot - AI email triage with n8n + Claude (workflow exports, samples and screenshot tooling)",
+  "type": "module",
+  "scripts": {
+    "build:workflows": "node scripts/build-workflows.mjs",
+    "render:results": "node scripts/render-results.mjs",
+    "screenshots": "node scripts/screenshots.mjs"
+  },
+  "devDependencies": {
+    "playwright": "1.65.1"
+  },
+  "license": "MIT"
+}

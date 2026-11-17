@@ -1,0 +1,8 @@
+# local n8n instance data (database, encryption key, logs)
+.n8n-data/
+node_modules/
+*.log
+.env
+.env.*
+# generated intermediate render
+docs/results.html

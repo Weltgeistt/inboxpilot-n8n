@@ -1,0 +1,292 @@
+{
+  "id": "InboxPilotDigest",
+  "name": "InboxPilot — Daily digest",
+  "nodes": [
+    {
+      "id": "a5590689-dcaa-4729-a7d2-ccc93c2c3efd",
+      "name": "Note 1",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -80,
+        40
+      ],
+      "parameters": {
+        "content": "## Daily digest (08:00)\nReads the last 24 h from the **Log** sheet, asks Claude for a 5-bullet summary and emails it to the owner. Quiet day → no email.",
+        "width": 1380,
+        "height": 700,
+        "color": 4
+      }
+    },
+    {
+      "id": "b1ecfda9-7f38-4f9a-a1c5-5817e162f9e6",
+      "name": "Every day at 08:00",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        0,
+        280
+      ],
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "triggerAtHour": 8
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "ebe89f74-6717-4042-a73e-916e24b72f59",
+      "name": "Read Log sheet",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        200,
+        280
+      ],
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "name": "Google Sheets account"
+        }
+      },
+      "alwaysOutputData": true,
+      "parameters": {
+        "authentication": "oAuth2",
+        "resource": "sheet",
+        "operation": "read",
+        "documentId": {
+          "__rl": true,
+          "mode": "id",
+          "value": "YOUR_GOOGLE_SHEET_ID"
+        },
+        "sheetName": {
+          "__rl": true,
+          "mode": "name",
+          "value": "Log"
+        },
+        "options": {}
+      }
+    },
+    {
+      "id": "e23aebef-66f0-498a-a4c0-ec04ff38b89b",
+      "name": "Last 24 h → text",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        400,
+        280
+      ],
+      "parameters": {
+        "jsCode": "// Keep rows logged in the last 24 hours and build a compact text list for Claude.\nconst since = Date.now() - 24 * 60 * 60 * 1000;\nconst rows = $input.all().map((i) => i.json)\n  .filter((r) => r.loggedAt && new Date(r.loggedAt).getTime() >= since);\n\nconst count = (c) => rows.filter((r) => r.category === c).length;\nconst lines = rows\n  .sort((a, b) => Number(b.urgency) - Number(a.urgency))\n  .map((r) => `[${r.category} · urgency ${r.urgency}] ${r.from} — ${r.summary}`);\n\nreturn [{\n  json: {\n    total: rows.length,\n    stats: `${rows.length} emails: ${count('lead')} leads, ${count('support')} support, ${count('invoice')} invoices, ${count('spam')} spam, ${count('other')} other`,\n    list: lines.join('\\n'),\n  },\n}];"
+      }
+    },
+    {
+      "id": "f7200f17-bc7c-4233-a6a8-79496d46c62e",
+      "name": "Anything new?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        600,
+        280
+      ],
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "c5fe0200-d1c7-4513-abd1-8fd22268c4ca",
+              "leftValue": "={{ $json.total }}",
+              "rightValue": 0,
+              "operator": {
+                "type": "number",
+                "operation": "gt"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      }
+    },
+    {
+      "id": "d27c6b71-496c-4441-ab82-79ff9c599836",
+      "name": "Write 5-bullet digest",
+      "type": "@n8n/n8n-nodes-langchain.chainLlm",
+      "typeVersion": 1.9,
+      "position": [
+        820,
+        160
+      ],
+      "retryOnFail": true,
+      "maxTries": 3,
+      "waitBetweenTries": 5000,
+      "parameters": {
+        "promptType": "define",
+        "text": "=Yesterday's inbox ({{ $json.stats }}):\n\n{{ $json.list }}",
+        "messages": {
+          "messageValues": [
+            {
+              "type": "SystemMessagePromptTemplate",
+              "message": "You write a morning inbox digest for a busy business owner.\nWrite exactly 5 bullet points in plain text (start each with \"- \").\nLead with what needs action today (urgency 4-5, new leads), then the rest.\nMention senders and concrete numbers. No intro, no outro, no markdown headings."
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "0866a1e6-8dc0-4520-a691-9efdde01a6a5",
+      "name": "Claude (Anthropic)",
+      "type": "@n8n/n8n-nodes-langchain.lmChatAnthropic",
+      "typeVersion": 1.6,
+      "position": [
+        1000,
+        380
+      ],
+      "credentials": {
+        "anthropicApi": {
+          "name": "Anthropic account"
+        }
+      },
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "mode": "id",
+          "value": "claude-haiku-5-5"
+        },
+        "options": {
+          "maxTokensToSample": 800
+        }
+      }
+    },
+    {
+      "id": "6d132d23-5d67-4ed0-aa94-59482e2a0f11",
+      "name": "Email digest to owner",
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        1120,
+        160
+      ],
+      "credentials": {
+        "gmailOAuth2": {
+          "name": "Gmail account"
+        }
+      },
+      "parameters": {
+        "authentication": "oAuth2",
+        "resource": "message",
+        "operation": "send",
+        "sendTo": "owner@your-company.example",
+        "subject": "=InboxPilot digest · {{ $now.toFormat('d LLL yyyy') }} · {{ $('Last 24 h → text').item.json.total }} emails",
+        "emailType": "text",
+        "message": "={{ $json.text }}\n\n—\n{{ $('Last 24 h → text').item.json.stats }}",
+        "options": {
+          "appendAttribution": false
+        }
+      }
+    },
+    {
+      "id": "ae05d969-752b-41bd-a411-ae97243cb423",
+      "name": "Quiet day (no email)",
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        900,
+        560
+      ],
+      "parameters": {}
+    }
+  ],
+  "connections": {
+    "Every day at 08:00": {
+      "main": [
+        [
+          {
+            "node": "Read Log sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Read Log sheet": {
+      "main": [
+        [
+          {
+            "node": "Last 24 h → text",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Last 24 h → text": {
+      "main": [
+        [
+          {
+            "node": "Anything new?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Anything new?": {
+      "main": [
+        [
+          {
+            "node": "Write 5-bullet digest",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Quiet day (no email)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Claude (Anthropic)": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Write 5-bullet digest",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Write 5-bullet digest": {
+      "main": [
+        [
+          {
+            "node": "Email digest to owner",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "errorWorkflow": "InboxPilotErrors"
+  },
+  "pinData": {},
+  "tags": [],
+  "meta": {
+    "templateCredsSetupCompleted": false
+  }
+}

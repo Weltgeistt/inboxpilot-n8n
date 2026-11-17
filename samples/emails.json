@@ -1,0 +1,92 @@
+[
+  {
+    "id": "msg-1001",
+    "threadId": "thr-1001",
+    "from": "Priya Nandakumar <priya@lumenforge.example>",
+    "to": "alex@brightwave.example",
+    "subject": "Quote request: automating onboarding for ~40 new hires a month",
+    "date": "2026-11-17T07:12:00Z",
+    "text": "Hi Alex,\n\nWe're a 120-person analytics firm and we onboard roughly 40 people a month. Today HR copies data between BambooHR, Google Workspace and Slack by hand and it takes about two days per hire.\n\nCould you send a rough quote and timeline for automating this? We'd like something live before our January intake. Happy to jump on a call Thursday or Friday.\n\nBest,\nPriya Nandakumar\nHead of People Ops, Lumenforge Analytics"
+  },
+  {
+    "id": "msg-1002",
+    "threadId": "thr-1002",
+    "from": "Operations Desk <ops@harborline-freight.example>",
+    "to": "alex@brightwave.example",
+    "subject": "URGENT: CSV export failing since 06:00 - drivers can't get manifests",
+    "date": "2026-11-17T07:31:00Z",
+    "text": "Hello,\n\nSince about 06:00 this morning the nightly CSV export from the dispatch dashboard returns an empty file. Our drivers leave at 09:30 and they need the manifests printed before then.\n\nNothing changed on our side. Error in the log: \"export job timed out after 30s\". Please treat this as top priority.\n\nThanks,\nDana Okafor\nHarborline Freight - Operations"
+  },
+  {
+    "id": "msg-1003",
+    "threadId": "thr-1003",
+    "from": "Northpeak Studio Billing <billing@northpeak-studio.example>",
+    "to": "alex@brightwave.example",
+    "subject": "Invoice INV-2026-1184 - October design retainer",
+    "date": "2026-11-17T06:05:00Z",
+    "text": "Hi,\n\nPlease find attached invoice INV-2026-1184 for the October design retainer (EUR 1,850.00, net 30, due 16 December 2026).\n\nBank details are on the invoice. Let us know if you need a PO number added.\n\nKind regards,\nNorthpeak Studio - Accounts"
+  },
+  {
+    "id": "msg-1004",
+    "threadId": "thr-1004",
+    "from": "Rewards Center <winner@prize-alerts-center.example>",
+    "to": "alex@brightwave.example",
+    "subject": "Congratulations!! You were selected for a $500 gift card",
+    "date": "2026-11-17T03:44:00Z",
+    "text": "Dear valued customer, you have been randomly selected to receive a $500 gift card! Click the link below within 24 hours and confirm your card details to claim your reward. Offer expires soon!!!"
+  },
+  {
+    "id": "msg-1005",
+    "threadId": "thr-1005",
+    "from": "Marco Bellandi <marco@bellandi-home.example>",
+    "to": "alex@brightwave.example",
+    "subject": "Shopify -> warehouse order sync, are you available?",
+    "date": "2026-11-17T08:02:00Z",
+    "text": "Hi Alex,\n\nI run a small homeware brand on Shopify (about 900 orders/month). Our 3PL wants orders as a CSV over SFTP every hour and we're currently doing it manually twice a day.\n\nIs this something you could build with n8n or Make? Budget is flexible for the right solution. A short call next week would be great.\n\nCiao,\nMarco Bellandi\nBellandi Home"
+  },
+  {
+    "id": "msg-1006",
+    "threadId": "thr-1006",
+    "from": "Jonas Weber <jonas.weber@kestrel-dental.example>",
+    "to": "alex@brightwave.example",
+    "subject": "Password reset link not arriving",
+    "date": "2026-11-17T08:15:00Z",
+    "text": "Hello,\n\nI tried to reset my password for the booking portal three times this morning but the reset email never arrives (checked spam too). I can still work from my colleague's login, so it's not blocking, but I'd like it fixed today if possible.\n\nThanks,\nJonas Weber\nKestrel Dental Clinic"
+  },
+  {
+    "id": "msg-1007",
+    "threadId": "thr-1007",
+    "from": "Automation Summit Team <speakers@automation-summit.example>",
+    "to": "alex@brightwave.example",
+    "subject": "Speaker invitation: \"AI agents in operations\" panel, 12 March",
+    "date": "2026-11-16T16:40:00Z",
+    "text": "Hi Alex,\n\nWe'd love to have you on our panel \"AI agents in operations: what actually works\" at Automation Summit on 12 March (remote participation possible). The session is 45 minutes with three other panelists.\n\nCould you let us know by 1 December?\n\nBest,\nThe Automation Summit team"
+  },
+  {
+    "id": "msg-1008",
+    "threadId": "thr-1008",
+    "from": "CloudNest Hosting <accounts@cloudnest-hosting.example>",
+    "to": "alex@brightwave.example",
+    "subject": "Payment reminder: invoice CN-7731 is 14 days overdue",
+    "date": "2026-11-17T05:20:00Z",
+    "text": "Hello,\n\nOur records show invoice CN-7731 (USD 349.00, VPS plan, October) is now 14 days overdue. To avoid service suspension on 24 November, please settle the balance or reply if you believe this is an error.\n\nCloudNest Hosting - Accounts Receivable"
+  },
+  {
+    "id": "msg-1009",
+    "threadId": "thr-1009",
+    "from": "Growth Experts <hello@rank1-guaranteed.example>",
+    "to": "alex@brightwave.example",
+    "subject": "Rank #1 on Google in 7 days - GUARANTEED",
+    "date": "2026-11-17T02:10:00Z",
+    "text": "Hi there, we noticed your website is not on the first page of Google. Our team guarantees #1 ranking in 7 days or your money back. Reply YES for a free audit. 1000+ happy clients!"
+  },
+  {
+    "id": "msg-1010",
+    "threadId": "thr-1010",
+    "from": "Sofia Lindqvist <sofia@paperkite.example>",
+    "to": "alex@brightwave.example",
+    "subject": "Webhook retries are flooding our endpoint",
+    "date": "2026-11-17T08:26:00Z",
+    "text": "Hi Alex,\n\nSince yesterday's deploy the order webhook seems to retry every few seconds even after our endpoint returns 200. We've received ~4,000 duplicate calls in the last hour and our rate limiter is now blocking real traffic.\n\nCan you take a look as soon as possible? I can share logs.\n\nSofia Lindqvist\nCTO, Paperkite"
+  }
+]

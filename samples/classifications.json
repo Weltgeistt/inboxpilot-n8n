@@ -1,0 +1,82 @@
+[
+  {
+    "messageId": "msg-1001",
+    "category": "lead",
+    "urgency": 4,
+    "summary": "HR lead wants a quote to automate onboarding (~40 hires/month) before January.",
+    "reply_draft": "Hi Priya,\n\nThanks for reaching out - automating onboarding across BambooHR, Google Workspace and Slack is a great fit for what I do. I can share a rough quote and timeline after a short call. Would Thursday at 15:00 CET or Friday at 10:00 CET work for you?\n\nBest,\nAlex",
+    "confidence": 0.95
+  },
+  {
+    "messageId": "msg-1002",
+    "category": "support",
+    "urgency": 5,
+    "summary": "Dispatch CSV export returns empty files since 06:00; drivers blocked by 09:30.",
+    "reply_draft": "Hi Dana,\n\nThanks for flagging this - I'm looking into the export timeout right now and will update you within 30 minutes. As a stopgap I can run the export manually and email you the manifests before 09:30.\n\nAlex",
+    "confidence": 0.97
+  },
+  {
+    "messageId": "msg-1003",
+    "category": "invoice",
+    "urgency": 2,
+    "summary": "Northpeak Studio invoice INV-2026-1184, EUR 1,850, due 16 Dec.",
+    "reply_draft": "Hi,\n\nThanks - invoice INV-2026-1184 received and forwarded for payment within the agreed terms.\n\nBest regards,\nAlex",
+    "confidence": 0.96
+  },
+  {
+    "messageId": "msg-1004",
+    "category": "spam",
+    "urgency": 1,
+    "summary": "Gift-card prize scam asking for card details.",
+    "reply_draft": "",
+    "confidence": 0.99
+  },
+  {
+    "messageId": "msg-1005",
+    "category": "lead",
+    "urgency": 3,
+    "summary": "Shopify brand (~900 orders/mo) wants hourly order export to 3PL via SFTP.",
+    "reply_draft": "Hi Marco,\n\nThanks for the details - an hourly Shopify-to-SFTP order export is very doable with n8n, including error alerts if a file fails. Could we do a 20-minute call next week? Tuesday or Wednesday afternoon works on my side.\n\nBest,\nAlex",
+    "confidence": 0.93
+  },
+  {
+    "messageId": "msg-1006",
+    "category": "support",
+    "urgency": 3,
+    "summary": "Portal password-reset emails not arriving; user has a workaround.",
+    "reply_draft": "Hi Jonas,\n\nSorry about that - I'm checking the email delivery logs for the reset messages now and will get back to you today. In the meantime I can trigger a manual reset for your account if that helps.\n\nBest,\nAlex",
+    "confidence": 0.9
+  },
+  {
+    "messageId": "msg-1007",
+    "category": "other",
+    "urgency": 2,
+    "summary": "Panel speaker invite for Automation Summit on 12 March; reply by 1 Dec.",
+    "reply_draft": "Hi team,\n\nThank you for the invitation - I'd be glad to join the panel. Remote participation would suit me best. Could you send over the format details?\n\nBest,\nAlex",
+    "confidence": 0.82
+  },
+  {
+    "messageId": "msg-1008",
+    "category": "invoice",
+    "urgency": 4,
+    "summary": "CloudNest invoice CN-7731 (USD 349) 14 days overdue; suspension on 24 Nov.",
+    "reply_draft": "Hello,\n\nThanks for the reminder - we're processing payment for CN-7731 today and will send the remittance confirmation once it's done.\n\nBest regards,\nAlex",
+    "confidence": 0.94
+  },
+  {
+    "messageId": "msg-1009",
+    "category": "spam",
+    "urgency": 1,
+    "summary": "Unsolicited 'guaranteed #1 Google ranking' SEO pitch.",
+    "reply_draft": "",
+    "confidence": 0.98
+  },
+  {
+    "messageId": "msg-1010",
+    "category": "support",
+    "urgency": 5,
+    "summary": "Webhook retries flooding client endpoint (~4,000 duplicates/hour) since deploy.",
+    "reply_draft": "Hi Sofia,\n\nThanks for the quick heads-up - I'm pausing the webhook retries now and investigating why 200 responses aren't being acknowledged. I'll confirm within the hour; please do send the logs.\n\nBest,\nAlex",
+    "confidence": 0.96
+  }
+]

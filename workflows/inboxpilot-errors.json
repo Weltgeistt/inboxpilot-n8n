@@ -1,0 +1,184 @@
+{
+  "id": "InboxPilotErrors",
+  "name": "InboxPilot — Errors",
+  "nodes": [
+    {
+      "id": "28741fc0-fa18-4f1d-ade3-f9b53eac39a8",
+      "name": "Note 1",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -80,
+        40
+      ],
+      "parameters": {
+        "content": "## Error workflow\nSet as **Settings → Error workflow** on the triage and digest workflows. Any failed run lands here and is sent to email (and Slack, optional).",
+        "width": 1000,
+        "height": 480,
+        "color": 3
+      }
+    },
+    {
+      "id": "3c1b9fef-ead0-42d3-a2fa-bd78503372ac",
+      "name": "Error Trigger",
+      "type": "n8n-nodes-base.errorTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        260
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "fe10f9e1-ef01-4d06-a201-cb9bc4503e77",
+      "name": "Format alert",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        240,
+        260
+      ],
+      "parameters": {
+        "mode": "manual",
+        "assignments": {
+          "assignments": [
+            {
+              "id": "d29092a2-84d7-40f5-a663-fba818174800",
+              "name": "workflow",
+              "value": "={{ $json.workflow.name }}",
+              "type": "string"
+            },
+            {
+              "id": "2429431e-ec40-4af0-ae54-5278838fb7b2",
+              "name": "node",
+              "value": "={{ $json.execution.lastNodeExecuted || 'unknown' }}",
+              "type": "string"
+            },
+            {
+              "id": "a8aa096b-295d-4475-a4d2-afdfa64d37ec",
+              "name": "message",
+              "value": "={{ $json.execution.error?.message || 'No error message' }}",
+              "type": "string"
+            },
+            {
+              "id": "64a5d58a-8814-449d-aa5f-449c87cf4029",
+              "name": "url",
+              "value": "={{ $json.execution.url || '' }}",
+              "type": "string"
+            },
+            {
+              "id": "a7a02524-c684-4fe2-aeb5-8766c78b716b",
+              "name": "mode",
+              "value": "={{ $json.execution.mode }}",
+              "type": "string"
+            },
+            {
+              "id": "ab15ab6f-2a20-4edc-aa3d-dd8e47fa8515",
+              "name": "at",
+              "value": "={{ $now.toISO() }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      }
+    },
+    {
+      "id": "004c9ec8-f459-4825-a731-b5f7ee1b3d9e",
+      "name": "Email the failure",
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        520,
+        160
+      ],
+      "credentials": {
+        "gmailOAuth2": {
+          "name": "Gmail account"
+        }
+      },
+      "parameters": {
+        "authentication": "oAuth2",
+        "resource": "message",
+        "operation": "send",
+        "sendTo": "owner@your-company.example",
+        "subject": "=[InboxPilot] {{ $json.workflow }} failed at \"{{ $json.node }}\"",
+        "emailType": "text",
+        "message": "=Workflow: {{ $json.workflow }}\nNode: {{ $json.node }}\nError: {{ $json.message }}\nMode: {{ $json.mode }}\nTime: {{ $json.at }}\n\nOpen execution: {{ $json.url }}",
+        "options": {
+          "appendAttribution": false
+        }
+      }
+    },
+    {
+      "id": "b05b2eff-8612-4209-aaa1-dccdcb1b13fb",
+      "name": "Post to #ops-alerts",
+      "type": "n8n-nodes-base.slack",
+      "typeVersion": 2.3,
+      "position": [
+        520,
+        360
+      ],
+      "credentials": {
+        "slackApi": {
+          "name": "Slack account"
+        }
+      },
+      "onError": "continueRegularOutput",
+      "notes": "Optional. Delete this node if you do not use Slack.",
+      "parameters": {
+        "authentication": "accessToken",
+        "resource": "message",
+        "operation": "post",
+        "select": "channel",
+        "channelId": {
+          "__rl": true,
+          "mode": "name",
+          "value": "#ops-alerts"
+        },
+        "text": ":warning: *{{ $json.workflow }}* failed at `{{ $json.node }}`\n>{{ $json.message }}\n<{{ $json.url }}|Open execution>",
+        "otherOptions": {
+          "includeLinkToWorkflow": false
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Error Trigger": {
+      "main": [
+        [
+          {
+            "node": "Format alert",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Format alert": {
+      "main": [
+        [
+          {
+            "node": "Email the failure",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Post to #ops-alerts",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "pinData": {},
+  "tags": [],
+  "meta": {
+    "templateCredsSetupCompleted": false
+  }
+}
